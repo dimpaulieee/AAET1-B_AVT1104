@@ -1,0 +1,1009 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AAET 1-B Reviewer - Avionics Quiz</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #0a1a35;
+            --secondary: #1e3a5f;
+            --accent: #4cc9f0;
+            --highlight: #f72585;
+            --text: #e6f1ff;
+            --correct: #4ade80;
+            --incorrect: #f87171;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Exo 2', sans-serif;
+            background: linear-gradient(135deg, var(--primary) 0%, #162b4d 100%);
+            color: var(--text);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            overflow-x: hidden;
+        }
+        
+        .container {
+            max-width: 800px;
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            width: 100%;
+            animation: fadeIn 1s ease-out;
+        }
+        
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(76, 201, 240, 0.3);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.8;
+            margin-bottom: 5px;
+        }
+        
+        .creator {
+            font-size: 0.9rem;
+            opacity: 0.7;
+            margin-bottom: 20px;
+        }
+        
+        .screen {
+            width: 100%;
+            background: rgba(30, 58, 95, 0.7);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(76, 201, 240, 0.2);
+            display: none;
+            animation: slideUp 0.5s ease-out;
+        }
+        
+        #start-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+        
+        .start-btn {
+            background: linear-gradient(135deg, var(--accent), var(--highlight));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            margin-top: 30px;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+        
+        .start-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 201, 240, 0.6);
+        }
+        
+        .question-counter {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1rem;
+            margin-bottom: 20px;
+            opacity: 0.8;
+        }
+        
+        .question {
+            font-size: 1.4rem;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+        
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .option {
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+            border-radius: 10px;
+            padding: 15px 20px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-size: 1.1rem;
+        }
+        
+        .option:hover {
+            background: rgba(76, 201, 240, 0.2);
+            transform: translateX(5px);
+        }
+        
+        .option.correct {
+            background: rgba(74, 222, 128, 0.3);
+            border-color: var(--correct);
+            animation: pulse 0.5s;
+        }
+        
+        .option.incorrect {
+            background: rgba(248, 113, 113, 0.3);
+            border-color: var(--incorrect);
+        }
+        
+        .feedback {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            font-weight: 600;
+            display: none;
+            animation: fadeIn 0.5s;
+        }
+        
+        .feedback.correct {
+            background: rgba(74, 222, 128, 0.2);
+            border: 1px solid var(--correct);
+        }
+        
+        .feedback.incorrect {
+            background: rgba(248, 113, 113, 0.2);
+            border: 1px solid var(--incorrect);
+        }
+        
+        .score-display {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 5rem;
+            margin: 30px 0;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: pulse 2s infinite;
+        }
+        
+        .score-text {
+            font-size: 1.5rem;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        
+        .restart-btn {
+            background: linear-gradient(135deg, var(--accent), var(--highlight));
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.2rem;
+            border-radius: 50px;
+            cursor: pointer;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(76, 201, 240, 0.4);
+        }
+        
+        .restart-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(76, 201, 240, 0.6);
+        }
+        
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+        
+        .progress {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent), var(--highlight));
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        @keyframes slideUp {
+            from { transform: translateY(20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        @keyframes confetti {
+            0% { transform: translateY(0) rotate(0); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+        
+        .confetti {
+            position: fixed;
+            width: 10px;
+            height: 10px;
+            background: var(--accent);
+            top: -10px;
+            opacity: 0;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .screen {
+                padding: 20px;
+            }
+            
+            .question {
+                font-size: 1.2rem;
+            }
+            
+            .option {
+                padding: 12px 15px;
+                font-size: 1rem;
+            }
+            
+            .score-display {
+                font-size: 4rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .question {
+                font-size: 1.1rem;
+            }
+            
+            .option {
+                padding: 10px 12px;
+                font-size: 0.95rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AAET 1-B REVIEWER</h1>
+            <p class="subtitle">Avionics Electrical Systems Quiz</p>
+            <p class="creator">Created by: Paul Andrei C. Timpog</p>
+        </header>
+        
+        <div id="start-screen" class="screen">
+            <h2>Welcome, Avionics Technician!</h2>
+            <p>Test your knowledge of aircraft electrical systems, wiring, crimping, and troubleshooting.</p>
+            <p>You'll face 50 challenging questions. Choose wisely!</p>
+            <button id="start-btn" class="start-btn">BEGIN QUIZ</button>
+        </div>
+        
+        <div id="quiz-screen" class="screen">
+            <div class="progress-bar">
+                <div class="progress" id="progress"></div>
+            </div>
+            <div class="question-counter" id="question-counter">Question 1 of 50</div>
+            <div class="question" id="question"></div>
+            <div class="options" id="options"></div>
+            <div class="feedback" id="feedback"></div>
+        </div>
+        
+        <div id="results-screen" class="screen">
+            <h2>Quiz Complete!</h2>
+            <div class="score-display" id="final-score">0%</div>
+            <div class="score-text" id="score-text"></div>
+            <button id="restart-btn" class="restart-btn">TRY AGAIN</button>
+        </div>
+    </div>
+
+    <script>
+        // Quiz questions data - 50 questions
+        const quizData = [
+            {
+                question: "What is the primary reason stranded conductors are used in aircraft wiring?",
+                options: [
+                    "Higher conductivity",
+                    "Lower cost",
+                    "To minimize fatigue breakage from vibration and flexing",
+                    "Easier installation"
+                ],
+                correct: 2
+            },
+            {
+                question: "Solid conductors are used in aircraft where:",
+                options: [
+                    "High flexibility is required.",
+                    "Vibration is not a problem.",
+                    "Maximum current carrying capacity is needed.",
+                    "They are always preferred over stranded wire."
+                ],
+                correct: 1
+            },
+            {
+                question: "Which of the following is an advantage of copper wire over aluminum wire?",
+                options: [
+                    "Lighter weight",
+                    "Lower cost",
+                    "Higher tensile strength",
+                    "Higher resistance to nicking"
+                ],
+                correct: 2
+            },
+            {
+                question: "The conductivity of aluminum is approximately what percentage of copper's conductivity?",
+                options: [
+                    "40%",
+                    "60%",
+                    "80%",
+                    "100%"
+                ],
+                correct: 1
+            },
+            {
+                question: "Why are aircraft wiring conductors often coated with tin, silver, or nickel?",
+                options: [
+                    "To increase flexibility",
+                    "To reduce weight",
+                    "To stop or slow down the oxidation rate",
+                    "To improve aesthetic appearance"
+                ],
+                correct: 2
+            },
+            {
+                question: "The majority of wiring in an aircraft uses:",
+                options: [
+                    "Bare solid aluminum wires",
+                    "Stranded tinned copper wires",
+                    "Solid silver-coated wires",
+                    "Bare copper wires"
+                ],
+                correct: 1
+            },
+            {
+                question: "Aluminum wires are typically used in aircraft when:",
+                options: [
+                    "A short, flexible connection is needed.",
+                    "A small amount of current is carried.",
+                    "A large amount of current must be carried for long distances.",
+                    "Vibration is a significant factor."
+                ],
+                correct: 2
+            },
+            {
+                question: "What does the shielding on a wire primarily help to prevent?",
+                options: [
+                    "Abrasion",
+                    "Corrosion",
+                    "Electromagnetic Interference (EMI)",
+                    "Overheating"
+                ],
+                correct: 2
+            },
+            {
+                question: "The standard that defines wire sizes is known as:",
+                options: [
+                    "Standard Wire Measurement (SWM)",
+                    "Aircraft Wire Standard (AWS)",
+                    "American Wire Gauge (AWG)",
+                    "Circular Area Unit (CAU)"
+                ],
+                correct: 2
+            },
+            {
+                question: "In the American Wire Gauge (AWG) system, as the gauge number increases, the wire diameter:",
+                options: [
+                    "Increases",
+                    "Decreases",
+                    "Stays the same",
+                    "Doubles"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the definition of electrical crimping?",
+                options: [
+                    "Soldering a terminal to a wire for a permanent connection.",
+                    "Firmly attaching a terminal to a conductor by pressure forming or reshaping a metal barrel.",
+                    "Twisting wires together to form a splice.",
+                    "Using adhesive to secure a wire to a connector."
+                ],
+                correct: 1
+            },
+            {
+                question: "Why is crimping preferred over soldering for aircraft electrical connections?",
+                options: [
+                    "Crimped connections are always cheaper.",
+                    "Crimped connections eliminate the chance of human error and require no corrosive fluxes.",
+                    "Soldering is not allowed on aircraft under any circumstances.",
+                    "Crimping tools are simpler to use than soldering irons."
+                ],
+                correct: 1
+            },
+            {
+                question: "When performing a crimp, what is the correct combination required for a satisfactory connection?",
+                options: [
+                    "Correct wire color and tool brand",
+                    "Correct conductor, crimp barrel, and tool",
+                    "Correct insulation material and operator skill level",
+                    "Correct terminal lug material and soldering flux"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the maximum number of nicked strands allowed for a copper wire size 24-14?",
+                options: [
+                    "None",
+                    "2 nicked, none broken",
+                    "4 nicked, none broken",
+                    "6 nicked, 2 broken"
+                ],
+                correct: 1
+            },
+            {
+                question: "For aluminum wires, what is the maximum allowable nicked and broken strands?",
+                options: [
+                    "2 nicked, none broken",
+                    "4 nicked, none broken",
+                    "None, none",
+                    "6 nicked, 5 broken"
+                ],
+                correct: 2
+            },
+            {
+                question: "When stripping a wire, what is an acceptable type of damage?",
+                options: [
+                    "Broken strands",
+                    "Nicked strands",
+                    "Minor longitudinal scrapes",
+                    "Severed conductor"
+                ],
+                correct: 2
+            },
+            {
+                question: "If a wire is nicked during stripping, what must be done before crimping?",
+                options: [
+                    "Apply tape over the nick.",
+                    "Solder the nick to reinforce it.",
+                    "Cut and re-strip the wire.",
+                    "Proceed if the nick is small; it is acceptable."
+                ],
+                correct: 2
+            },
+            {
+                question: "After stripping, what should be done with the wire strands?",
+                options: [
+                    "Cut them to a shorter length.",
+                    "Solder them together.",
+                    "Twist them firmly together in the same direction as the normal lay of the wire.",
+                    "Spread them out to fit the barrel better."
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the first step in the wire stripping procedure?",
+                options: [
+                    "Squeeze the handle firmly.",
+                    "Determine the proper length of insulation to be removed.",
+                    "Release the handle and remove the wire.",
+                    "Check for nicks and breaks."
+                ],
+                correct: 1
+            },
+            {
+                question: "A check before crimping includes ensuring that:",
+                options: [
+                    "The wire insulation is melted slightly.",
+                    "The stranded wire has not loosened and expanded larger than the insulation.",
+                    "The conductor is coated with solder.",
+                    "The tool is set to the highest pressure setting."
+                ],
+                correct: 1
+            },
+            {
+                question: "What is a terminal lug?",
+                options: [
+                    "A device used to join two wires end-to-end.",
+                    "A mechanical device used to terminate electrical wires to a device or equipment.",
+                    "A tool used for cutting and stripping wires.",
+                    "A type of insulation sleeve."
+                ],
+                correct: 1
+            },
+            {
+                question: "In a terminal lug, what is the 'tongue'?",
+                options: [
+                    "The part that is crimped to the conductor.",
+                    "The part that holds the insulation.",
+                    "The point of attachment to a device or equipment.",
+                    "The color-coded identification band."
+                ],
+                correct: 2
+            },
+            {
+                question: "During the crimping procedure for a terminal lug, what indicates a complete crimp cycle with a ratcheting tool?",
+                options: [
+                    "A green light turns on.",
+                    "The ratchet releases.",
+                    "The wire pulls out easily.",
+                    "The terminal lug changes color."
+                ],
+                correct: 1
+            },
+            {
+                question: "When inspecting a crimped terminal lug, how much should the conductor protrude from the crimp barrel?",
+                options: [
+                    "Not at all",
+                    "1/64 inch",
+                    "1/32 inch",
+                    "1/16 inch"
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the maximum number of terminal lugs that can be attached to a single stud?",
+                options: [
+                    "2",
+                    "3",
+                    "4",
+                    "5"
+                ],
+                correct: 2
+            },
+            {
+                question: "On a terminal block stud, where should terminal lugs with larger holes be installed?",
+                options: [
+                    "On the top of the stack.",
+                    "In the middle of the stack.",
+                    "Nearer to the bottom of the stud.",
+                    "It does not matter."
+                ],
+                correct: 2
+            },
+            {
+                question: "How many times can a terminal lug be bent?",
+                options: [
+                    "Twice",
+                    "Once",
+                    "Three times",
+                    "As many times as needed"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is a splice?",
+                options: [
+                    "A tool for cutting wire bundles.",
+                    "A mechanical device used to join 2 or more wires together.",
+                    "A type of terminal block.",
+                    "An insulating tape."
+                ],
+                correct: 1
+            },
+            {
+                question: "When crimping a splice, where should the end of the conductor be?",
+                options: [
+                    "Flush with the end of the splice.",
+                    "Butt against the wire stop or be visible in the inspection window.",
+                    "Halfway into the barrel.",
+                    "Protruding 1/4 inch from the end."
+                ],
+                correct: 1
+            },
+            {
+                question: "How should splices be arranged in a wire bundle?",
+                options: [
+                    "Grouped together for easy access.",
+                    "Staggered to minimize any increase in the size of the bundle.",
+                    "Placed all at the same point for consistency.",
+                    "Located only at the ends of the bundle."
+                ],
+                correct: 1
+            },
+            {
+                question: "What does CAU stand for?",
+                options: [
+                    "Crimping Assessment Unit",
+                    "Circular Area Units",
+                    "Copper Aluminum Usage",
+                    "Connector Attachment Unit"
+                ],
+                correct: 1
+            },
+            {
+                question: "To ensure a good crimp, the CAU of the conductor must:",
+                options: [
+                    "Be exactly double the CAU of the terminal.",
+                    "Fall within the minimum/maximum range of the termination device.",
+                    "Be less than the insulation diameter.",
+                    "Be measured after crimping."
+                ],
+                correct: 1
+            },
+            {
+                question: "Which method is NOT used to achieve CAU compatibility with an undersized conductor?",
+                options: [
+                    "Adapter",
+                    "Filler Wire Stub",
+                    "Doubled Back",
+                    "Soldering"
+                ],
+                correct: 3
+            },
+            {
+                question: "What is the maximum length allowed for a filler wire stub?",
+                options: [
+                    "1 inch",
+                    "2 inches",
+                    "6 inches",
+                    "12 inches"
+                ],
+                correct: 1
+            },
+            {
+                question: "The filler wire stub must be:",
+                options: [
+                    "A solid core wire.",
+                    "A stranded wire with the same specification and type as the undersized wire.",
+                    "Made of a different material than the undersized wire.",
+                    "Twice the gauge of the undersized wire."
+                ],
+                correct: 1
+            },
+            {
+                question: "What are the two forms of contacts?",
+                options: [
+                    "Plug and Receptacle",
+                    "Pin (Male) and Socket (Female)",
+                    "Bayonet and Threaded",
+                    "Front Release and Rear Release"
+                ],
+                correct: 1
+            },
+            {
+                question: "A standard contact is one where:",
+                options: [
+                    "The engaging end is always smaller than the crimp barrel.",
+                    "It is always colored red.",
+                    "The engaging end and the crimp barrel are of the same size.",
+                    "It is used only for fiber optics."
+                ],
+                correct: 2
+            },
+            {
+                question: "What is the purpose of a positioner on a crimping tool?",
+                options: [
+                    "To strip the wire insulation.",
+                    "To cut the wire to length.",
+                    "To hold the contact in a proper position before crimping.",
+                    "To measure the CAU of the conductor."
+                ],
+                correct: 2
+            },
+            {
+                question: "What are the two main parts of a connector?",
+                options: [
+                    "Pin and Socket",
+                    "Plug and Receptacle",
+                    "Male and Female",
+                    "Barrel and Tongue"
+                ],
+                correct: 1
+            },
+            {
+                question: "Connectors are primarily used where:",
+                options: [
+                    "Permanent connections are required.",
+                    "Frequent connections/disconnections are required.",
+                    "High voltage is present.",
+                    "Vibration is minimal."
+                ],
+                correct: 1
+            },
+            {
+                question: "For a bayonet-type connector, how is it secured?",
+                options: [
+                    "With a locking screw.",
+                    "By rotating the coupling ring clockwise until it snaps.",
+                    "With a strap wrench.",
+                    "By pushing it in until it clicks."
+                ],
+                correct: 1
+            },
+            {
+                question: "What indicates a properly mated bayonet connector?",
+                options: [
+                    "A witness band disappears.",
+                    "A clicking sound is heard and bayonet pins are visible.",
+                    "The connector can rotate freely.",
+                    "The insulation grip is engaged."
+                ],
+                correct: 1
+            },
+            {
+                question: "For a threaded-type connector, how is it fully secured?",
+                options: [
+                    "It is hand-tight only.",
+                    "Use a padded plier to tighten further (max 1/8 turn).",
+                    "It is tightened until the threads strip.",
+                    "It is secured with safety wire."
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the purpose of the witness band on a threaded connector?",
+                options: [
+                    "To indicate the wire size.",
+                    "To show the connector type.",
+                    "To visually indicate when the connector is fully mated (it disappears).",
+                    "To identify the manufacturer."
+                ],
+                correct: 2
+            },
+            {
+                question: "What is 'wire wrapping'?",
+                options: [
+                    "Tying wires into a bundle.",
+                    "Wrapping a stripped solid conductor wire around a terminal post.",
+                    "Insulating a wire with tape.",
+                    "The process of shielding a wire."
+                ],
+                correct: 1
+            },
+            {
+                question: "How does a wire wrap connection maintain electrical contact?",
+                options: [
+                    "Through solder.",
+                    "Through crimping.",
+                    "The sharp corner of the terminal penetrates the conductor surface under tension.",
+                    "Through an adhesive."
+                ],
+                correct: 2
+            },
+            {
+                question: "What is essential to wear during the wire wrapping process?",
+                options: [
+                    "Steel-toed boots.",
+                    "An ESDS (Electrostatic Discharge Sensitive) wrist strap.",
+                    "Safety glasses.",
+                    "Insulated gloves."
+                ],
+                correct: 1
+            },
+            {
+                question: "In a proper wire wrap, a portion of the insulation is:",
+                options: [
+                    "Removed completely.",
+                    "Wrapped around the terminal.",
+                    "Coated with solder.",
+                    "Cut away and discarded."
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the maximum allowable space between adjacent turns of un-insulated wire in a wrap?",
+                options: [
+                    "The full diameter of the wire.",
+                    "One-half the nominal diameter of the un-insulated wire.",
+                    "One full turn.",
+                    "There is no maximum; gaps are acceptable."
+                ],
+                correct: 1
+            }
+        ];
+
+        // DOM elements
+        const startScreen = document.getElementById('start-screen');
+        const quizScreen = document.getElementById('quiz-screen');
+        const resultsScreen = document.getElementById('results-screen');
+        const startBtn = document.getElementById('start-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        const questionElement = document.getElementById('question');
+        const optionsElement = document.getElementById('options');
+        const feedbackElement = document.getElementById('feedback');
+        const questionCounterElement = document.getElementById('question-counter');
+        const progressElement = document.getElementById('progress');
+        const finalScoreElement = document.getElementById('final-score');
+        const scoreTextElement = document.getElementById('score-text');
+
+        // Game state
+        let currentQuestion = 0;
+        let score = 0;
+        let totalQuestions = 50;
+
+        // Audio elements
+        const correctSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        const incorrectSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
+        
+        // Initialize the game
+        function init() {
+            startBtn.addEventListener('click', startGame);
+            restartBtn.addEventListener('click', restartGame);
+        }
+
+        // Start the game
+        function startGame() {
+            startScreen.style.display = 'none';
+            quizScreen.style.display = 'block';
+            currentQuestion = 0;
+            score = 0;
+            showQuestion();
+        }
+
+        // Show current question
+        function showQuestion() {
+            resetState();
+            if (currentQuestion >= totalQuestions) {
+                showResults();
+                return;
+            }
+            
+            const question = quizData[currentQuestion];
+            questionCounterElement.textContent = `Question ${currentQuestion + 1} of ${totalQuestions}`;
+            questionElement.textContent = question.question;
+            progressElement.style.width = `${((currentQuestion) / totalQuestions) * 100}%`;
+            
+            question.options.forEach((option, index) => {
+                const button = document.createElement('div');
+                button.classList.add('option');
+                button.textContent = option;
+                button.addEventListener('click', () => selectOption(index));
+                optionsElement.appendChild(button);
+            });
+        }
+
+        // Reset question state
+        function resetState() {
+            feedbackElement.style.display = 'none';
+            feedbackElement.className = 'feedback';
+            while (optionsElement.firstChild) {
+                optionsElement.removeChild(optionsElement.firstChild);
+            }
+        }
+
+        // Handle option selection
+        function selectOption(index) {
+            const question = quizData[currentQuestion];
+            const options = document.querySelectorAll('.option');
+            
+            // Disable all options after selection
+            options.forEach(option => {
+                option.style.pointerEvents = 'none';
+            });
+            
+            if (index === question.correct) {
+                // Correct answer
+                options[index].classList.add('correct');
+                feedbackElement.textContent = "Correct! Well done.";
+                feedbackElement.classList.add('correct');
+                feedbackElement.style.display = 'block';
+                score++;
+                
+                // Play correct sound
+                correctSound.play();
+                
+                // Create confetti effect for correct answer
+                createConfetti();
+            } else {
+                // Incorrect answer
+                options[index].classList.add('incorrect');
+                options[question.correct].classList.add('correct');
+                feedbackElement.textContent = `Incorrect. The correct answer is: ${question.options[question.correct]}`;
+                feedbackElement.classList.add('incorrect');
+                feedbackElement.style.display = 'block';
+                
+                // Play incorrect sound
+                incorrectSound.play();
+            }
+            
+            // Move to next question after a delay
+            setTimeout(() => {
+                currentQuestion++;
+                showQuestion();
+            }, 2000);
+        }
+
+        // Show final results
+        function showResults() {
+            quizScreen.style.display = 'none';
+            resultsScreen.style.display = 'block';
+            
+            const percentage = Math.round((score / totalQuestions) * 100);
+            finalScoreElement.textContent = `${percentage}%`;
+            
+            // Set score message based on performance
+            let message = "";
+            if (percentage >= 90) {
+                message = "Outstanding! You're an avionics expert!";
+                createConfetti(50);
+            } else if (percentage >= 70) {
+                message = "Great job! You have solid avionics knowledge.";
+                createConfetti(30);
+            } else if (percentage >= 50) {
+                message = "Good effort! Keep studying to improve.";
+            } else {
+                message = "Keep practicing! Review the material and try again.";
+            }
+            
+            scoreTextElement.textContent = `You scored ${score} out of ${totalQuestions}. ${message}`;
+            progressElement.style.width = '100%';
+        }
+
+        // Restart the game
+        function restartGame() {
+            resultsScreen.style.display = 'none';
+            startScreen.style.display = 'flex';
+        }
+
+        // Create confetti effect
+        function createConfetti(count = 20) {
+            for (let i = 0; i < count; i++) {
+                const confetti = document.createElement('div');
+                confetti.classList.add('confetti');
+                
+                // Random position
+                const left = Math.random() * 100;
+                confetti.style.left = `${left}vw`;
+                
+                // Random color
+                const colors = ['#4cc9f0', '#f72585', '#7209b7', '#3a0ca3', '#4361ee'];
+                const color = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.backgroundColor = color;
+                
+                // Random size
+                const size = Math.random() * 10 + 5;
+                confetti.style.width = `${size}px`;
+                confetti.style.height = `${size}px`;
+                
+                // Random animation
+                const duration = Math.random() * 3 + 2;
+                const delay = Math.random() * 0.5;
+                confetti.style.animation = `confetti ${duration}s ease-out ${delay}s forwards`;
+                
+                document.body.appendChild(confetti);
+                
+                // Remove confetti after animation completes
+                setTimeout(() => {
+                    confetti.remove();
+                }, (duration + delay) * 1000);
+            }
+        }
+
+        // Initialize the game when the page loads
+        window.addEventListener('DOMContentLoaded', init);
+    </script>
+</body>
+</html>

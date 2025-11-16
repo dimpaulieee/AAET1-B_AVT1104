@@ -301,14 +301,14 @@
     <div class="container">
         <header>
             <h1>AAET 1-B REVIEWER</h1>
-            <p class="subtitle">AVT 1104 Mock Exam</p>
+            <p class="subtitle">Avionics Electrical Systems Quiz</p>
             <p class="creator">Created by: Paul Andrei C. Timpog</p>
         </header>
         
         <div id="start-screen" class="screen">
             <h2>Welcome, Avionics Technician!</h2>
             <p>Test your knowledge of aircraft electrical systems covering the Final Period.</p>
-            <p> Disclaimer: This is not the actual test and please be informed that this is just a MOCK EXAM. This is created by a student and there are chances that the correctness of the mock exam is inaccurate. </p>
+            <p>Disclaimer: This is not the actual test and please be informed that this is just a MOCK EXAM. This is created by a student and there are chances that the correctness of the mock exam is inaccurate. </p>
             <p>You'll face 50 challenging questions. Choose wisely!</p>
             <button id="start-btn" class="start-btn">BEGIN QUIZ</button>
         </div>
@@ -823,6 +823,26 @@
                     "There is no maximum; gaps are acceptable."
                 ],
                 correct: 1
+            },
+            {
+                question: "What does EMI stand for?",
+                options: [
+                    "Electrical Magnetic Induction",
+                    "Electromagnetic Interference",
+                    "Electronic Measurement Interface",
+                    "Energy Management Indicator"
+                ],
+                correct: 1
+            },
+            {
+                question: "What is the parameter to verify the presence of a continuous path of electrical between 2 points?",
+                options: [
+                    "Resistance",
+                    "Voltage",
+                    "Continuity",
+                    "Current"
+                ],
+                correct: 2
             }
         ];
 
@@ -843,7 +863,7 @@
         // Game state
         let currentQuestion = 0;
         let score = 0;
-        let totalQuestions = 50;
+        let totalQuestions = quizData.length;
 
         // Audio elements
         const correctSound = new Audio('data:audio/wav;base64,UklGRigAAABXQVZFZm10IBAAAAABAAEARKwAAIhYAQACABAAZGF0YQQAAAAAAA==');
@@ -853,6 +873,9 @@
         function init() {
             startBtn.addEventListener('click', startGame);
             restartBtn.addEventListener('click', restartGame);
+            
+            // Update question counter to show actual total
+            questionCounterElement.textContent = `Question 1 of ${totalQuestions}`;
         }
 
         // Start the game
